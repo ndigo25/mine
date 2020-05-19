@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo -n "enter your address: "
+echo -n "enter the IP Address to start your nmap scan: "
 read ADDRESS
 for ip in $ADDRESS; do
 nmap -sC -sT -v -p- -oA nmap $address$ip

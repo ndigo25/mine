@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 echo "-------Built for users who are trying to do some privesc on hackthebox or tryhackme with less output and some automated privesc tasks.------------"

@@ -2,7 +2,6 @@
 
 echo "-------Built for users who are trying to do some privesc on hackthebox or tryhackme with less output and some automated privesc tasks.------------"
 echo "-----------Github nk3sec-----------"
-echo "-----------Twitter @natekelly56-----------"
 echo "-----------Tested on Linux Privesc Playground, Sudo Security Bypass, and  on tryhackme---------"
 echo
 echo
@@ -230,10 +229,3 @@ sleep 2
 echo
 #Option to copy results or ssh keys over to remote machine. 
 rm .file
-echo "Seeing if we can cd into root..."
-if cd /root;
-then
-echo "We can cd into root!"
-else
-echo "Looks like we can not cd into root..."
-fi

